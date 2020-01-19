@@ -18,7 +18,7 @@ SPRITE_SCALING_PENGUIN = 0.1 #800x800
 SPRITE_SCALING_FLAG = 0.6
 
 MOVEMENT_SPEED = 5
-JUMP_SPEED = 6
+JUMP_SPEED = 20 #6
 JUMP_TIME = .5
 DEFAULT_Y_POS = 50
 BUNNY_SPEED = 2
@@ -31,7 +31,7 @@ BUFFER_TIME = 1.5 #for oops function
 class MyGame(arcade.Window):
     """ Our custom Window Class"""
     time = 0 #every time on_update() runs, add delta_time to this - total time program running
-    time_between_obstacles = 3
+    time_between_obstacles = 2
     time_last_obstacle = 0
     time_last_oops = 0
 
@@ -40,7 +40,7 @@ class MyGame(arcade.Window):
     jumping = False
     time_jump_start = 0
 
-    y_speed = 10
+    y_speed = 15
 
     score = 0
 
@@ -125,10 +125,12 @@ class MyGame(arcade.Window):
         if(len(tree_hit_list) > 0):
             self.oops()
 
+
         #check for collision with rocks
         rock_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.rock_sprite_list)
         if(len(rock_hit_list) > 0 and not(self.jumping)):
             self.oops()
+
 
         #check for collision with logs
         log_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.log_sprite_list)
@@ -160,13 +162,13 @@ class MyGame(arcade.Window):
             if(n < 0.25):
                 self.addTree()
             elif(n < 0.5):
-                #self.addLog()
-                pass
+                self.addLog()
+
             elif(n < 0.75):
                 self.addRock()
             else:
-                #self.addBunny()
-                pass
+                self.addBunny()
+
             self.time_last_obstacle = self.time
 
         #add flag
@@ -288,6 +290,7 @@ class MyGame(arcade.Window):
         player_right = self.player_sprite.center_x + player_width/2
         if player_left <= 0 or player_right >= 600:
             self.oops()
+
 
     counter = 0
     def oops(self):
